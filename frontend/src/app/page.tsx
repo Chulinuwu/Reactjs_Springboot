@@ -2,7 +2,12 @@
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [users, setUsers] = useState([]);
+  interface User {
+    name: string;
+    email: string;
+  }
+
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/users")
@@ -15,7 +20,10 @@ export default function Home() {
       <h1>Users</h1>
       <ul>
         {users.map((user, index) => (
-          <li key={index}>{user}</li>
+          <div>
+          <li>{user.name}</li>
+          <li>{user.email}</li>
+          </div>
         ))}
       </ul>
     </div>
