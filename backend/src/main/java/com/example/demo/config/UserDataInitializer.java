@@ -5,126 +5,98 @@ import com.example.demo.model.User;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class UserDataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final PasswordEncoder passwordEncoder; // ใช้เข้ารหัสรหัสผ่าน
 
-    public UserDataInitializer(UserRepository userRepository, ProductRepository productRepository) {
+    public UserDataInitializer(UserRepository userRepository, ProductRepository productRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) {
-        // เช็คว่ามีข้อมูลผู้ใช้อยู่แล้วหรือไม่
-        if (userRepository.count() == 0) {
-            User user1 = new User();
-            user1.setName("John Doe");
-            user1.setEmail("johndoe@example.com");
+        // 📌 1️⃣ เช็คว่ามี User อยู่แล้วหรือไม่ ถ้ามีให้ UPDATE ถ้าไม่มีให้ CREATE
+        createOrUpdateUser("John Doe", "johndoe@example.com", "123456", "admin");
+        createOrUpdateUser("Jane Smith", "janesmith@example.com", "654321", "customer");
 
-            User user2 = new User();
-            user2.setName("Jane Smith");
-            user2.setEmail("janesmith@example.com");
+        // 📌 2️⃣ เช็คและเพิ่มสินค้าถ้ายังไม่มี
+        createOrUpdateProduct("Milk", 40.0, 100, "Dairy", "Fresh cow's milk");
+        createOrUpdateProduct("Bread", 25.0, 50, "Bakery", "Whole wheat bread");
+        createOrUpdateProduct("Cheese", 120.0, 30, "Dairy", "Aged cheddar cheese");
+        createOrUpdateProduct("Butter", 60.0, 80, "Dairy", "Salted butter");
+        createOrUpdateProduct("Eggs", 45.0, 200, "Poultry", "Free range eggs");
+        createOrUpdateProduct("Apple", 15.0, 150, "Fruits", "Fresh red apples");
+        createOrUpdateProduct("Carrot", 30.0, 100, "Vegetables", "Fresh carrots");
+        createOrUpdateProduct("Chicken Breast", 150.0, 40, "Meat", "Boneless skinless chicken breasts");
+        createOrUpdateProduct("Rice", 80.0, 60, "Grains", "Premium jasmine rice");
+        createOrUpdateProduct("Orange Juice", 50.0, 100, "Beverages", "Freshly squeezed orange juice");
+    }
 
-            userRepository.save(user1);
-            userRepository.save(user2);
+    // 📌 3️⃣ ฟังก์ชันช่วยสร้างหรืออัปเดต User
+    private void createOrUpdateUser(String name, String email, String password, String role) {
+        Optional<User> existingUser = userRepository.findByEmail(email); // ค้นหา User จาก email
 
-            System.out.println("✅ ข้อมูลผู้ใช้เริ่มต้นถูกเพิ่มลงในฐานข้อมูลเรียบร้อยแล้ว!");
+        if (existingUser.isPresent()) {
+            // ถ้า User มีอยู่แล้ว → อัปเดตข้อมูล
+            User user = existingUser.get();
+            user.setName(name);
+            user.setRole(role);
+
+            // 📌 เข้ารหัสรหัสผ่านก่อนอัปเดต
+            if (!passwordEncoder.matches(password, user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(password));
+            }
+
+            userRepository.save(user);
+            System.out.println("🔄 อัปเดตข้อมูลผู้ใช้: " + email);
         } else {
-            System.out.println("ℹ️ มีข้อมูลผู้ใช้อยู่แล้ว ไม่ต้องเพิ่มใหม่");
+            // ถ้าไม่มี → สร้างใหม่
+            User newUser = new User();
+            newUser.setName(name);
+            newUser.setEmail(email);
+            newUser.setPassword(passwordEncoder.encode(password)); // เข้ารหัสรหัสผ่าน
+            newUser.setRole(role);
+
+            userRepository.save(newUser);
+            System.out.println("✅ เพิ่มผู้ใช้ใหม่: " + email);
         }
+    }
 
-        // เช็คว่ามีข้อมูลสินค้าหรือไม่
-        if (productRepository.count() == 0) {
-            Product product1 = new Product();
-            product1.setName("Milk");
-            product1.setPrice(40.0);
-            product1.setQuantity(100);
-            product1.setCategory("Dairy");
-            product1.setDescription("Fresh cow's milk");
+    // 📌 4️⃣ ฟังก์ชันช่วยสร้างหรืออัปเดต Product
+    private void createOrUpdateProduct(String name, double price, int quantity, String category, String description) {
+        Optional<Product> existingProduct = productRepository.findByName(name); // ค้นหาสินค้าตามชื่อ
 
-            Product product2 = new Product();
-            product2.setName("Bread");
-            product2.setPrice(25.0);
-            product2.setQuantity(50);
-            product2.setCategory("Bakery");
-            product2.setDescription("Whole wheat bread");
+        if (existingProduct.isPresent()) {
+            // ถ้ามีอยู่แล้ว → อัปเดตข้อมูลสินค้า
+            Product product = existingProduct.get();
+            product.setPrice(price);
+            product.setQuantity(quantity);
+            product.setCategory(category);
+            product.setDescription(description);
 
-            Product product3 = new Product();
-            product3.setName("Cheese");
-            product3.setPrice(120.0);
-            product3.setQuantity(30);
-            product3.setCategory("Dairy");
-            product3.setDescription("Aged cheddar cheese");
-
-            Product product4 = new Product();
-            product4.setName("Butter");
-            product4.setPrice(60.0);
-            product4.setQuantity(80);
-            product4.setCategory("Dairy");
-            product4.setDescription("Salted butter");
-
-            Product product5 = new Product();
-            product5.setName("Eggs");
-            product5.setPrice(45.0);
-            product5.setQuantity(200);
-            product5.setCategory("Poultry");
-            product5.setDescription("Free range eggs");
-
-            Product product6 = new Product();
-            product6.setName("Apple");
-            product6.setPrice(15.0);
-            product6.setQuantity(150);
-            product6.setCategory("Fruits");
-            product6.setDescription("Fresh red apples");
-
-            Product product7 = new Product();
-            product7.setName("Carrot");
-            product7.setPrice(30.0);
-            product7.setQuantity(100);
-            product7.setCategory("Vegetables");
-            product7.setDescription("Fresh carrots");
-
-            Product product8 = new Product();
-            product8.setName("Chicken Breast");
-            product8.setPrice(150.0);
-            product8.setQuantity(40);
-            product8.setCategory("Meat");
-            product8.setDescription("Boneless skinless chicken breasts");
-
-            Product product9 = new Product();
-            product9.setName("Rice");
-            product9.setPrice(80.0);
-            product9.setQuantity(60);
-            product9.setCategory("Grains");
-            product9.setDescription("Premium jasmine rice");
-
-            Product product10 = new Product();
-            product10.setName("Orange Juice");
-            product10.setPrice(50.0);
-            product10.setQuantity(100);
-            product10.setCategory("Beverages");
-            product10.setDescription("Freshly squeezed orange juice");
-
-            // บันทึกข้อมูลสินค้า
-            productRepository.save(product1);
-            productRepository.save(product2);
-            productRepository.save(product3);
-            productRepository.save(product4);
-            productRepository.save(product5);
-            productRepository.save(product6);
-            productRepository.save(product7);
-            productRepository.save(product8);
-            productRepository.save(product9);
-            productRepository.save(product10);
-
-            System.out.println("✅ ข้อมูลสินค้าถูกเพิ่มลงในฐานข้อมูลเรียบร้อยแล้ว!");
+            productRepository.save(product);
+            System.out.println("🔄 อัปเดตสินค้า: " + name);
         } else {
-            System.out.println("ℹ️ มีข้อมูลสินค้าหรืออยู่แล้ว ไม่ต้องเพิ่มใหม่");
+            // ถ้าไม่มี → เพิ่มใหม่
+            Product newProduct = new Product();
+            newProduct.setName(name);
+            newProduct.setPrice(price);
+            newProduct.setQuantity(quantity);
+            newProduct.setCategory(category);
+            newProduct.setDescription(description);
+
+            productRepository.save(newProduct);
+            System.out.println("✅ เพิ่มสินค้าใหม่: " + name);
         }
     }
 }
