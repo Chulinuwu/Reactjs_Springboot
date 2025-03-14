@@ -21,8 +21,11 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String email;
-    private String password; // เพิ่มฟิลด์ password
-    private String role; // เพิ่มฟิลด์ role (customer / admin)
+    private String password;
+    private String role;
+
+    @Column(nullable = false, columnDefinition = "DOUBLE PRECISION DEFAULT 10000")
+    private double balance = 10000;
 
     // Getter & Setter
     public Long getId() { return id; }
@@ -39,4 +42,7 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public double getBalance() { return balance; }
+    public void setBalance(double balance) { this.balance = balance; }
 }
