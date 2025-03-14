@@ -66,6 +66,7 @@ public class UserDataInitializer implements CommandLineRunner {
             newUser.setEmail(email);
             newUser.setPassword(passwordEncoder.encode(password)); // เข้ารหัสรหัสผ่าน
             newUser.setRole(role);
+            newUser.setBalance(10000);
 
             userRepository.save(newUser);
             System.out.println("✅ เพิ่มผู้ใช้ใหม่: " + email);
