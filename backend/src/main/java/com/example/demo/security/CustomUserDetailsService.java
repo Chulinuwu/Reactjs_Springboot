@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
                 .password(user.getPassword())
-                .roles(user.getRole()) // ใช้ ROLE จาก DB
+                .roles(user.getRole().replace("ROLE_", "")) // ✅ เอา "ROLE_" ออกก่อน
                 .build();
     }
 }
