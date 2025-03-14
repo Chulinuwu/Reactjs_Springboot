@@ -4,6 +4,7 @@ import com.example.demo.model.Product;
 import com.example.demo.model.User;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -23,19 +24,50 @@ public class ProductController {
         this.userRepository = userRepository;
     }
 
-    static class PurchaseRequest {
-        public Long productId;
-        public int quantity;
-    }
+    // ✅ ทุกคนสามารถดูสินค้าได้
     @GetMapping
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    // ✅ Admin เท่านั้นที่สามารถเพิ่มสินค้าได้
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public Product createProduct(@RequestBody Product product) {
+        return productRepository.save(product);
+    }
+
+    // ✅ Admin เท่านั้นที่สามารถแก้ไขสินค้าได้
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
+        Product product = productRepository.findById(id).orElseThrow();
+        product.setName(productDetails.getName());
+        product.setPrice(productDetails.getPrice());
+        product.setQuantity(productDetails.getQuantity());
+        product.setCategory(productDetails.getCategory());
+        product.setDescription(productDetails.getDescription());
+        return productRepository.save(product);
+    }
+
+    // ✅ Admin เท่านั้นที่สามารถลบสินค้าได้
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteProduct(@PathVariable Long id) {
+        productRepository.deleteById(id);
+        return "✅ Product deleted!";
+    }
+
+    // ✅ User สามารถซื้อสินค้าได้
+    static class PurchaseRequest {
+        public Long productId;
+        public int quantity;
+    }
+
     @PostMapping("/buy")
+    @PreAuthorize("hasRole('USER')")
     public String buyProduct(@RequestBody PurchaseRequest request) {
         System.out.println("🔹 Buying product: " + request.productId + ", quantity: " + request.quantity);
-        // ✅ ดึงข้อมูล User ปัจจุบันจาก JWT Token
         String email = getCurrentUserEmail();
         Optional<User> userOpt = userRepository.findByEmail(email);
         Optional<Product> productOpt = productRepository.findById(request.productId);
@@ -45,19 +77,13 @@ public class ProductController {
 
         User user = userOpt.get();
         Product product = productOpt.get();
-
         double totalPrice = product.getPrice() * request.quantity;
 
-        // ✅ เช็คว่า User มีเงินพอไหม
         if (user.getBalance() < totalPrice) return "❌ Not enough balance!";
-
-        // ✅ เช็คว่าสินค้าในสต็อกพอไหม
         if (product.getQuantity() < request.quantity) return "❌ Not enough stock!";
 
-        // ✅ อัปเดตข้อมูล
         user.setBalance(user.getBalance() - totalPrice);
         product.setQuantity(product.getQuantity() - request.quantity);
-
         userRepository.save(user);
         productRepository.save(product);
 
