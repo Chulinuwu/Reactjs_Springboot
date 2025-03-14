@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.6",
-    "@radix-ui/react-select": "^2.1.6",
-    "@shadcn/ui": "^0.0.4",
-    "lucide-react": "^0.479.0",
-    "react-toastify": "^11.0.5"
-  }
-}
