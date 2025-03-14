@@ -3,8 +3,6 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "users")
 @Getter
@@ -21,8 +19,8 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String email;
-    private String password; // เพิ่มฟิลด์ password
-    private String role; // เพิ่มฟิลด์ role (customer / admin)
+    private String password;
+    private String role;
 
     // Getter & Setter
     public Long getId() { return id; }

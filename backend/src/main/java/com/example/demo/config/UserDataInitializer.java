@@ -2,8 +2,8 @@ package com.example.demo.config;
 
 import com.example.demo.model.Product;
 import com.example.demo.model.User;
-import com.example.demo.repository.ProductRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.Repository.ProductRepository;
+import com.example.demo.Repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

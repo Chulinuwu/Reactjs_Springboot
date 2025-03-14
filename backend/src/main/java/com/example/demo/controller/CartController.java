@@ -16,12 +16,12 @@ public class CartController {
 
     @GetMapping("/{userId}")
     public List<CartItem> getCartByUser(@PathVariable Long userId) {
-        return cartService.getCartByUser(userId);
+        return cartService.getCartItems(userId);
     }
 
     @PostMapping
-    public CartItem addToCart(@RequestBody CartItem cartItem) {
-        return cartService.addToCart(cartItem);
+    public CartItem addToCart(@PathVariable Long userId ,@RequestBody CartItem cartItem, int quantity) {
+        return cartService.addToCart(userId, cartItem.getId(), quantity);
     }
 
     @DeleteMapping("/{cartItemId}")
@@ -31,6 +31,6 @@ public class CartController {
 
     @DeleteMapping("/clear/{userId}")
     public void clearCart(@PathVariable Long userId) {
-        cartService.clearCart(userId);
+        cartService.removeFromCart(userId);
     }
 }

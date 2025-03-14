@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.model.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,19 +25,21 @@ public class Order {
     @Column(nullable = false)
     private double totalPrice;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrderStatus status = OrderStatus.PREPARING;
+    private String status = "PREPARING";
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
-}
 
-enum OrderStatus {
-    PREPARING,
-    SHIPPING,
-    DELIVERED
+    public List<OrderItem> getItems() {
+        return orderItems;
+    }
+
+    public void setItems(List<OrderItem> items) {
+        this.orderItems = items;
+    }
+    
 }
