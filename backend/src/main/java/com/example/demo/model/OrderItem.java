@@ -4,27 +4,27 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "products")
+@Table(name = "order_items")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
-    @Column(nullable = false)
-    private double price;
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     @Column(nullable = false)
     private int quantity;
 
-    private String description;
-
     @Column(nullable = false)
-    private String category;
+    private double price;
 }

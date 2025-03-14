@@ -11,6 +11,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -19,14 +20,19 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/{id}")
+    public Optional<User> getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
     @PostMapping
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
-    @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
     }
 
     @DeleteMapping("/{id}")
