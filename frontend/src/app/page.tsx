@@ -175,8 +175,8 @@ export default function ProductManagement() {
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">ระบบจัดการสินค้า</h1>
-            <p className="text-muted-foreground mt-1">แสดงและจัดการข้อมูลสินค้าทั้งหมด</p>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Bakery Shop System</h1>
+            <p className="text-muted-foreground mt-1">Freshly Baked for You</p>
           </div>
 
           <div className="flex flex-wrap gap-2">
