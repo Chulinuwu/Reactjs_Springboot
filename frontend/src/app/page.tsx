@@ -299,6 +299,18 @@ export default function ProductManagement() {
         />
 
         <Toaster />
+
+        <footer className="w-full py-4 sm:py-6 bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+        <div className="container max-w-7xl mx-auto px-4 md:px-8">
+          <div className="flex flex-col items-center justify-center text-center">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed px-2">
+              <span className="block sm:inline">©Jirameth and Amphikapha, All Right Reserved</span>
+              <span className="hidden sm:inline"> | </span>
+              <span className="block sm:inline mt-1 sm:mt-0">Implemented by Nextjs / JavaSpringboot</span>
+            </p>
+          </div>
+        </div>
+      </footer>
       </div>
     </div>
   )
