@@ -79,6 +79,8 @@ public class ProductController {
         Product product = productOpt.get();
         double totalPrice = product.getPrice() * request.quantity;
 
+        if (product.getQuantity() == 0) return "❌ Product is out of stock!";
+
         if (user.getBalance() < totalPrice) return "❌ Not enough balance!";
         if (product.getQuantity() < request.quantity) return "❌ Not enough stock!";
 
