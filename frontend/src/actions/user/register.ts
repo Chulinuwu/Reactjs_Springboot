@@ -1,5 +1,3 @@
-'use server'
-
 import { config } from '@/app/config'
 import { FormValues } from '@/types/register'
 
