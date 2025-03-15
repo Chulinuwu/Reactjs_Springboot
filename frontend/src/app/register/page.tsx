@@ -21,11 +21,11 @@ export default function Register() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setLoading(true);
-    console.log(data);
+    // console.log(data);
     const LoadingToast = toast.loading('Loading...');
     try {
       const response = await registerUser({ form: data });
-      console.log('Registered user:', response);
+    //   console.log('Registered user:', response);
 
       try {
         const loginData = {
@@ -33,7 +33,7 @@ export default function Register() {
             password: data.password
         }
         const loginResponse = await LoginUser({ form: loginData });
-        console.log('Logged in successfully:', loginResponse);
+        // console.log('Logged in successfully:', loginResponse);
         toast.dismiss(LoadingToast);
         router.push('/');
       } catch (error: any) {

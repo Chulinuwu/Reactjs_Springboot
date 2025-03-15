@@ -1,4 +1,4 @@
-import { Product } from "@/types/product"
+
 import { formatPrice } from "@/utils/formatPrice"
 import ProductActions from "./ProductActions"
 import { ProductActionsProps } from "@/types/product-action"

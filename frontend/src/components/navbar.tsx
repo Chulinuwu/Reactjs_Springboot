@@ -6,7 +6,6 @@ import { LogOut } from 'lucide-react';
 import { LogoutUser } from '@/actions/user/logout';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { config } from '@/app/config';
 
 interface NavbarProps {
     balance: number;
@@ -17,8 +16,6 @@ export const Navbar: React.FC<NavbarProps> = ({ balance, isAdmin }) => {
     const router = useRouter();
 
   async function onLogout() {
-    console.log("config", config.baseURL);
-    console.log('Logouting...');
     try {
       await LogoutUser();
       toast.success('Logged out successfully!');
