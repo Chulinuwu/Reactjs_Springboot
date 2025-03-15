@@ -10,6 +10,10 @@ import { Button } from '@/components/ui/button';
 import { Eye, EyeOff } from 'lucide-react';
 import { Toaster, toast } from 'react-hot-toast'
 
+interface LoginError extends Error {
+  message: string;
+}
+
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const router = useRouter();
@@ -21,23 +25,23 @@ export default function Login() {
     // console.log(data);
     const LoadingToast = toast.loading('Loading...');
     try {
-        const loginResponse = await LoginUser({ form: data });
-        console.log('Logged in successfully:', loginResponse);
-        toast.dismiss(LoadingToast);
-        router.push('/');
-    } catch (error) {
-        toast.dismiss(LoadingToast);
-        if (error.message.includes('Invalid email or password')) {
-            toast.error('Invalid email or password');
-            console.error('Login failed:', error);
-        } else {
-        console.error('Login failed:', error);
-        toast.error('Login failed!');
-        }
-      console.error('Login failed:', error);
-    } finally {
-      setLoading(false);
-    }
+      const loginResponse = await LoginUser({ form: data });
+      console.log('Logged in successfully:', loginResponse);
+      toast.dismiss(LoadingToast);
+      router.push('/');
+  } catch (error) {
+      toast.dismiss(LoadingToast);
+      const loginError = error as LoginError;
+      if (loginError.message.includes('Invalid email or password')) {
+          toast.error('Invalid email or password');
+          console.error('Login failed:', loginError);
+      } else {
+          console.error('Login failed:', loginError);
+          toast.error('Login failed!');
+      }
+  } finally {
+    setLoading(false);
+  }
   };
 
   return (
