@@ -20,11 +20,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public Optional<User> getUserById(@PathVariable Long id) {
