@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.Repository.UserRepository;
 import com.example.demo.security.JwtUtil;
-import com.example.demo.service.UserService; // ✅ Import UserService
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
