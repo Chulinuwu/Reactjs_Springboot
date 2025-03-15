@@ -1,4 +1,3 @@
-// components/BuyDialog.tsx
 import {
     Dialog,
     DialogContent,
