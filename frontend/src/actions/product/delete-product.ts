@@ -1,8 +1,17 @@
 'use server'
 
+import { config } from "@/app/config"
+import { cookies } from 'next/headers';
+
 export async function deleteProduct(id: number): Promise<{ message: string }> {
-    const res = await fetch(`http://localhost:8080/api/products/${id}`, {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth-token');
+
+    const res = await fetch(`${config.baseURL}/api/products/${id}`, {
         method: 'DELETE',
+        headers: { 
+            Authorization: `Bearer ${token?.value}` 
+        },
     });
 
     if (!res.ok) {
@@ -17,5 +26,5 @@ export async function deleteProduct(id: number): Promise<{ message: string }> {
         return { message: "Deleted successfully" };
     }
 
-    return JSON.parse(responseBody);
+    return { message: responseBody };
 }

@@ -1,8 +1,9 @@
 'use server'
-import { Product } from "@/type/product"
+import { Product } from "@/types/product"
+import { config } from "@/app/config"
 
 export async function getProducts(): Promise<Product> {
-  const res = await fetch(`http://localhost:8080/api/products`, {
+  const res = await fetch(`${config.baseURL}/api/products`, {
     method: 'GET',
   })
 
