@@ -64,9 +64,8 @@ export default function ProductManagement() {
         setUser(userData);
         setIsAdmin(userData.role === "ROLE_ADMIN");
       } 
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch user data.");
-
     }
   };
 
@@ -85,7 +84,7 @@ export default function ProductManagement() {
     try {
       const response = await getProducts()
       setProducts(Array.isArray(response) ? response : [])
-    } catch (error) {
+    } catch {
       toast.error("Cannot fetch products. Please try again.")
     } finally {
       setIsLoading(false)
@@ -106,7 +105,7 @@ export default function ProductManagement() {
       })
       setIsAddDialogOpen(false)
       toast.success("Added new product successfully")
-    } catch (error) {
+    } catch{
       toast.error("Cannot add product. Please try again.")
     } finally {
       setIsSubmitting(false)
@@ -116,12 +115,12 @@ export default function ProductManagement() {
   const handleUpdateProduct = async () => {
     setIsSubmitting(true)
     try {
-      const response = await updateProduct(editProduct.id, editProduct)
+      await updateProduct(editProduct.id, editProduct)
       const updatedProducts = products.map((product) => (product.id === editProduct.id ? editProduct : product))
       setProducts(updatedProducts)
       setIsEditDialogOpen(false)
       toast.success("Updated product successfully")
-    } catch (error) {
+    } catch {
       toast.error("Cannot update product. Please try again.")
     } finally {
       setIsSubmitting(false)
@@ -132,12 +131,12 @@ export default function ProductManagement() {
     if (deleteId === null) return
     setIsSubmitting(true)
     try {
-      const response = await deleteProduct(deleteId)
+      await deleteProduct(deleteId)
       const filteredProducts = products.filter((product) => product.id !== deleteId)
       setProducts(filteredProducts)
       setIsDeleteDialogOpen(false)
       toast.success("Deleted product successfully")
-    } catch (error) {
+    } catch {
       toast.error("Cannot delete product. Please try again.")
     } finally {
       setIsSubmitting(false)
@@ -170,7 +169,7 @@ export default function ProductManagement() {
       toast.success("Product purchased successfully!");
       setIsBuyDialogOpen(false);
       await fetchUser();
-    } catch (error) {
+    } catch {
       toast.error("Failed to purchase product");
     } finally {
       setIsSubmitting(false);

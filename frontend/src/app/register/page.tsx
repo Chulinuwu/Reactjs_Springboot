@@ -13,6 +13,10 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Toaster, toast } from 'react-hot-toast'
 
+interface RegisterError extends Error {
+  message: string;
+}
+
 export default function Register() {
   const { register, handleSubmit, control, formState: { errors } } = useForm<FormValues>();
   const router = useRouter();
@@ -21,30 +25,27 @@ export default function Register() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setLoading(true);
-    // console.log(data);
     const LoadingToast = toast.loading('Loading...');
     try {
-      const response = await registerUser({ form: data });
-      // console.log('Registered user:', response);
-
+      await registerUser({ form: data });
       try {
         const loginData = {
             email: data.email,
             password: data.password
         }
-        const loginResponse = await LoginUser({ form: loginData });
-        // console.log('Logged in successfully:', loginResponse);
+        await LoginUser({ form: loginData });
         toast.dismiss(LoadingToast);
         router.push('/');
-      } catch (error: any) {
+      } catch (error) {
         toast.dismiss(LoadingToast);
         console.error('Login failed:', error);
         toast.error('Login failed!');
         router.push('/login');
       }
-    } catch (error: any) {
+    } catch (error) {
         toast.dismiss(LoadingToast);
-        if (error.message.includes('Email is already taken')) {
+        const loginError = error as RegisterError;
+        if (loginError.message.includes('Email is already taken')) {
             toast.error('Email is already taken!');
           } else {
             console.error('Registration failed:', error);

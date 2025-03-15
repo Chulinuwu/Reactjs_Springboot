@@ -22,11 +22,9 @@ export default function Login() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setLoading(true);
-    // console.log(data);
     const LoadingToast = toast.loading('Loading...');
     try {
-      const loginResponse = await LoginUser({ form: data });
-      console.log('Logged in successfully:', loginResponse);
+      await LoginUser({ form: data });
       toast.dismiss(LoadingToast);
       router.push('/');
   } catch (error) {

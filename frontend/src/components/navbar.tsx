@@ -21,7 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({ balance, isAdmin, name}) => {
       await LogoutUser();
       toast.success('Logged out successfully!');
       router.push('/register');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Logout failed:', error);
         toast.error('Logout failed!');
     }
