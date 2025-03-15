@@ -3,12 +3,33 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { LogOut } from 'lucide-react';
+import { LogoutUser } from '@/actions/user/logout';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
+import { config } from '@/app/config';
 
-export default function Navbar() {
-  const balance = 1000;
+interface NavbarProps {
+    balance: number;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ balance }) => {
+    const router = useRouter();
+
+  async function onLogout() {
+    console.log("config", config.baseURL);
+    console.log('Logouting...');
+    try {
+      await LogoutUser();
+      toast.success('Logged out successfully!');
+      router.push('/register');
+    } catch (error: any) {
+      console.error('Logout failed:', error);
+        toast.error('Logout failed!');
+    }
+  }
 
   return (
-    <nav className='fixed top-0 left-0 right-0 z-50 bg-sky-950 text-white p-4 h-20'>
+    <nav className='fixed top-0 left-0 right-0 z-50 bg-sky-950 text-white p-4 h-20 drop-shadow-lg'>
       <div className='container mx-auto flex items-center justify-between'>
         {/* Logo */}
         <Link href='/'>
@@ -32,7 +53,7 @@ export default function Navbar() {
               </div>
               <button
                 type='button'
-                onClick={() => console.log('Logout')}
+                onClick={onLogout}
                 className='cursor-pointer mr-2'
                 >
                     <LogOut size={30} />

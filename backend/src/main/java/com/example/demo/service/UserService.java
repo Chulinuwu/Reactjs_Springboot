@@ -61,7 +61,7 @@ public class UserService {
         return false;
     }
 
-    public void logout() {
-        SecurityContextHolder.clearContext();
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

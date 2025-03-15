@@ -3,9 +3,12 @@ package com.example.demo.controller;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,9 +36,17 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logoutUser() {
-        userService.logout();
-        return ResponseEntity.ok("✅ User logged out successfully!");
+    @GetMapping("/me")
+    public ResponseEntity<User> getMe() {
+    // ดึงข้อมูลผู้ใช้ปัจจุบันจาก SecurityContext
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (principal instanceof UserDetails userDetails) {
+        // ค้นหาผู้ใช้จาก email
+        Optional<User> user = userService.getUserByEmail(userDetails.getUsername());
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        }
     }
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+}
 }
