@@ -28,7 +28,7 @@ export async function LoginUser(data: { form: FormValues }): Promise<LoginRespon
   const cookieStore = await cookies();
   cookieStore.set('auth-token', responseData.token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== 'production', // Set to true in production
+    secure: process.env.NODE_ENV === 'production', // Set to true in production
     path: '/',
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
