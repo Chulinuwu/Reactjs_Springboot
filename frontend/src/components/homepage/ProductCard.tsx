@@ -1,15 +1,9 @@
 import { Product } from "@/types/product"
 import { formatPrice } from "@/utils/formatPrice"
 import ProductActions from "./ProductActions"
+import { ProductActionsProps } from "@/types/product-action"
 
-interface ProductCardProps {
-  product: Product
-  isAdmin: boolean
-  onEdit: (product: Product) => void
-  onDelete: (id: number) => void
-}
-
-export default function ProductCard({ product, isAdmin, onEdit, onDelete }: ProductCardProps) {
+export default function ProductCard({ product, isAdmin, onEdit, onDelete, onBuy }: ProductActionsProps) {
   return (
     <div className="bg-white rounded-lg border shadow-sm p-4">
       <div className="flex justify-between items-start mb-3">
@@ -22,6 +16,7 @@ export default function ProductCard({ product, isAdmin, onEdit, onDelete }: Prod
           isAdmin={isAdmin}
           onEdit={onEdit}
           onDelete={onDelete}
+          onBuy={onBuy}
           isCardView
         />
       </div>

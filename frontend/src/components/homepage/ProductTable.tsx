@@ -8,9 +8,11 @@ interface ProductTableProps {
   isAdmin: boolean
   onEdit: (product: Product) => void
   onDelete: (id: number) => void
+  onBuy: (productId: number, quantity: number) => void
+  onQuantityChange?: (quantity: number) => void;
 }
 
-export default function ProductTable({ products, isAdmin, onEdit, onDelete }: ProductTableProps) {
+export default function ProductTable({ products, isAdmin, onEdit, onDelete, onBuy, onQuantityChange }: ProductTableProps) {
   return (
     <Table>
       <TableHeader>
@@ -21,7 +23,7 @@ export default function ProductTable({ products, isAdmin, onEdit, onDelete }: Pr
           <TableHead>Remaining</TableHead>
           <TableHead>Category</TableHead>
           <TableHead>Details</TableHead>
-          <TableHead className="text-center">Manage</TableHead>
+          <TableHead className="text-center">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -39,6 +41,8 @@ export default function ProductTable({ products, isAdmin, onEdit, onDelete }: Pr
                 isAdmin={isAdmin}
                 onEdit={onEdit}
                 onDelete={onDelete}
+                onBuy={onBuy}
+                onQuantityChange={onQuantityChange}
               />
             </TableCell>
           </TableRow>

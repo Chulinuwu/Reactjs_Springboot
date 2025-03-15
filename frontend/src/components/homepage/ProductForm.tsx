@@ -86,7 +86,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isSubmitting,
         />
       </div>
 
-      <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
+      <DialogFooter className="flex-col sm:flex-row gap-2">
         <Button variant="outline" onClick={onCancel} className="w-full sm:w-auto">
             Cancel
         </Button>

@@ -1,20 +1,28 @@
-"use client"
+// components/ProductActions.tsx
+"use client";
 
-import { useState } from "react"
-import { Product } from "@/types/product"
-import { Button } from "@/components/ui/button"
-import { Pencil, Trash2, Plus, Minus, ShoppingCart } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Pencil, Trash2, Plus, Minus, ShoppingCart } from "lucide-react";
+import { ProductActionsProps } from "@/types/product-action";
+import { useEffect } from "react";
 
-interface ProductActionsProps {
-  product: Product
-  isAdmin: boolean
-  onEdit: (product: Product) => void
-  onDelete: (id: number) => void
-  isCardView?: boolean
-}
+export default function ProductActions({
+  product,
+  isAdmin,
+  onEdit,
+  onDelete,
+  onBuy,
+  onQuantityChange,
+  isCardView,
+}: ProductActionsProps) {
+  const [quantity, setQuantity] = useState(1);
 
-export default function ProductActions({ product, isAdmin, onEdit, onDelete, isCardView }: ProductActionsProps) {
-  const [quantity, setQuantity] = useState(1)
+  useEffect(() => {
+    if (onQuantityChange) {
+      onQuantityChange(quantity);
+    }
+  }, [quantity, onQuantityChange]);
 
   if (isAdmin) {
     return (
@@ -38,7 +46,7 @@ export default function ProductActions({ product, isAdmin, onEdit, onDelete, isC
           {!isCardView && <span className="ml-2">Delete</span>}
         </Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -62,10 +70,14 @@ export default function ProductActions({ product, isAdmin, onEdit, onDelete, isC
           <Plus className="h-3.5 w-3.5" />
         </Button>
       </div>
-      <Button size={isCardView ? "icon" : "default"} className={isCardView ? "h-8 w-8" : ""}>
+      <Button
+        size={isCardView ? "icon" : "default"}
+        className={isCardView ? "h-8 w-8" : ""}
+        onClick={() => product.id !== undefined && onBuy(product.id, quantity)}
+      >
         <ShoppingCart className={isCardView ? "h-3.5 w-3.5" : "h-4 w-4"} />
         {!isCardView && <span className="ml-2">Buy</span>}
       </Button>
     </div>
-  )
+  );
 }

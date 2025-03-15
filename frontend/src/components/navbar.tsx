@@ -30,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({ balance, isAdmin }) => {
   }
 
   return (
-    <nav className='fixed top-0 left-0 right-0 z-50 bg-sky-950 text-white p-4 h-20 drop-shadow-lg'>
+    <nav className='fixed top-0 left-0 right-0 z-50 bg-sky-900 text-white p-4 h-20'>
       <div className='container mx-auto flex items-center justify-between'>
         {/* Logo */}
         <Link href='/'>

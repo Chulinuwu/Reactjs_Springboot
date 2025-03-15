@@ -25,7 +25,7 @@ export default function DeleteDialog({ isOpen, onOpenChange, onDelete, isSubmitt
             <DialogDescription>Are you sure you want to delete this product?<br /> This action is irreversible.</DialogDescription>
           </DialogHeader>
   
-          <DialogFooter className="mt-4 flex-col sm:flex-row gap-2 sm:gap-0">
+          <DialogFooter className="mt-4 flex-col sm:flex-row gap-2">
             <Button variant="outline" onClick={() => onOpenChange(false)} className="w-full sm:w-auto">
               Cancel
             </Button>

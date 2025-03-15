@@ -17,10 +17,12 @@ import { getProducts } from "../actions/product/get-product"
 import { addProduct as addProductAPI } from "../actions/product/add-product"
 import { updateProduct } from "../actions/product/update-product"
 import { deleteProduct } from "../actions/product/delete-product"
+import { buyProduct } from "../actions/product/buy-product"
 import ProductTable from "@/components/homepage/ProductTable";
 import ProductCard from "@/components/homepage/ProductCard";
 import ProductForm from "@/components/homepage/ProductForm";
 import DeleteDialog from "@/components/homepage/DeleteDialog";
+import BuyDialog from "@/components/homepage/BuyDialog";
 import { Product } from "@/types/product"
 import { User } from "@/types/user"
 import { Navbar } from "@/components/navbar";
@@ -34,6 +36,9 @@ export default function ProductManagement() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isBuyDialogOpen, setIsBuyDialogOpen] = useState(false)
+  const [buyId, setBuyId] = useState<number | null>(null)
+  const [buyQuantity, setBuyQuantity] = useState<number>(1)
   const [deleteId, setDeleteId] = useState<number | null>(null)
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -150,6 +155,28 @@ export default function ProductManagement() {
     setIsDeleteDialogOpen(true)
   }
 
+  const openBuyDialog = (id: number, quantity: number) => {
+    setBuyId(id);
+    setBuyQuantity(quantity);
+    setIsBuyDialogOpen(true);
+  };
+
+  const handleBuy = async () => {
+    if (buyId === null) return;
+
+    setIsSubmitting(true);
+    try {
+      await buyProduct(buyId, buyQuantity);
+      toast.success("Product purchased successfully!");
+      setIsBuyDialogOpen(false);
+      await fetchUser();
+    } catch (error) {
+      toast.error("Failed to purchase product");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div>
       <Navbar balance={user?.balance ?? 0} isAdmin={isAdmin} />
@@ -214,12 +241,13 @@ export default function ProductManagement() {
             ) : (
               <>
                 <div className="hidden md:block overflow-x-auto">
-                  <ProductTable
-                    products={products}
-                    isAdmin={isAdmin}
-                    onEdit={openEditDialog}
-                    onDelete={openDeleteDialog}
-                  />
+                <ProductTable
+                  products={products}
+                  isAdmin={isAdmin}
+                  onEdit={openEditDialog}
+                  onDelete={openDeleteDialog}
+                  onBuy={openBuyDialog}
+                />
                 </div>
 
                 <div className="flex flex-col bg-transparent gap-4 md:hidden">
@@ -230,6 +258,7 @@ export default function ProductManagement() {
                       isAdmin={isAdmin}
                       onEdit={openEditDialog}
                       onDelete={openDeleteDialog}
+                      onBuy={openBuyDialog}
                     />
                   ))}
                 </div>
@@ -258,6 +287,15 @@ export default function ProductManagement() {
           isOpen={isDeleteDialogOpen}
           onOpenChange={setIsDeleteDialogOpen}
           onDelete={handleDeleteProduct}
+          isSubmitting={isSubmitting}
+        />
+
+        <BuyDialog
+          isOpen={isBuyDialogOpen}
+          onOpenChange={setIsBuyDialogOpen}
+          onConfirm={handleBuy}
+          productName={products.find((p) => p.id === buyId)?.name || ""}
+          quantity={buyQuantity}
           isSubmitting={isSubmitting}
         />
 
