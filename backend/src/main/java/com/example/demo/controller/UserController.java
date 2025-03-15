@@ -4,6 +4,7 @@ import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-
     @Autowired
     private UserService userService;
 
@@ -21,16 +21,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Optional<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }

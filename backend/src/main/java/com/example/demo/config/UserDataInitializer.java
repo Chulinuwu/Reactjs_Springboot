@@ -26,8 +26,8 @@ public class UserDataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         // 📌 1️⃣ เช็คว่ามี User อยู่แล้วหรือไม่ ถ้ามีให้ UPDATE ถ้าไม่มีให้ CREATE
-        createOrUpdateUser("John Doe", "johndoe@example.com", "123456", "admin");
-        createOrUpdateUser("Jane Smith", "janesmith@example.com", "654321", "customer");
+        createOrUpdateUser("John Doe", "johndoe@example.com", "123456", "ROLE_ADMIN");
+        createOrUpdateUser("Jane Smith", "janesmith@example.com", "654321", "ROLE_USER");
 
         // 📌 2️⃣ เช็คและเพิ่มสินค้าถ้ายังไม่มี
         createOrUpdateProduct("Milk", 40.0, 100, "Dairy", "Fresh cow's milk");
@@ -66,6 +66,7 @@ public class UserDataInitializer implements CommandLineRunner {
             newUser.setEmail(email);
             newUser.setPassword(passwordEncoder.encode(password)); // เข้ารหัสรหัสผ่าน
             newUser.setRole(role);
+            newUser.setBalance(10000);
 
             userRepository.save(newUser);
             System.out.println("✅ เพิ่มผู้ใช้ใหม่: " + email);
