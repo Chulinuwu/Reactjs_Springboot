@@ -1,5 +1,5 @@
 'use server'
-import { Product } from "@/type/product"
+import { Product } from "@/types/product"
 
 export async function addProduct(product: Product): Promise<Product> {
     const res = await fetch(`http://localhost:8080/api/products`, {

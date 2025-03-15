@@ -18,10 +18,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { Toaster, toast } from 'react-hot-toast'
 import { PlusCircle, Pencil, Trash2, Loader2, Package, RefreshCw } from "lucide-react"
-import { getProducts } from "./action/product/get-product"
-import { addProduct as addProductAPI } from "./action/product/add-product"
-import { updateProduct } from "./action/product/update-product"
-import { deleteProduct } from "./action/product/delete-product"
+import { getProducts } from "../actions/product/get-product"
+import { addProduct as addProductAPI } from "../actions/product/add-product"
+import { updateProduct } from "../actions/product/update-product"
+import { deleteProduct } from "../actions/product/delete-product"
 
 // ประเภทข้อมูลสินค้า
 interface Product {
