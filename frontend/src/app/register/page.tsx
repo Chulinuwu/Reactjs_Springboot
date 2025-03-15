@@ -25,7 +25,7 @@ export default function Register() {
     const LoadingToast = toast.loading('Loading...');
     try {
       const response = await registerUser({ form: data });
-    //   console.log('Registered user:', response);
+      // console.log('Registered user:', response);
 
       try {
         const loginData = {
