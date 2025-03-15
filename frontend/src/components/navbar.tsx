@@ -10,9 +10,10 @@ import { toast } from 'react-hot-toast';
 interface NavbarProps {
     balance: number;
     isAdmin: boolean;
+    name: string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ balance, isAdmin }) => {
+export const Navbar: React.FC<NavbarProps> = ({ balance, isAdmin, name}) => {
     const router = useRouter();
 
   async function onLogout() {
@@ -27,11 +28,11 @@ export const Navbar: React.FC<NavbarProps> = ({ balance, isAdmin }) => {
   }
 
   return (
-    <nav className='fixed top-0 left-0 right-0 z-50 bg-sky-900 text-white p-4 h-20'>
+    <nav className='fixed top-0 left-0 right-0 z-50 bg-black text-white p-4 h-20'>
       <div className='container mx-auto flex items-center justify-between'>
         {/* Logo */}
         <Link href='/'>
-          <div className='flex items-center'>
+          <div className='flex items-center gap-5'>
             <Image
               src='/img/logo.png'
               alt='Logo'
@@ -39,6 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({ balance, isAdmin }) => {
               height={50}
               className='rounded-full'
             />
+            Welcome, {name}
           </div>
         </Link>
 

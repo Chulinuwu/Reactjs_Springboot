@@ -179,7 +179,7 @@ export default function ProductManagement() {
 
   return (
     <div>
-      <Navbar balance={user?.balance ?? 0} isAdmin={isAdmin} />
+      <Navbar balance={user?.balance ?? 0} isAdmin={isAdmin} name={user?.name ?? ""} />
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4 pt-28 pb-10 md:px-8">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

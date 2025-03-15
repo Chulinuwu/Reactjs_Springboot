@@ -22,10 +22,10 @@ export default function Login() {
     const LoadingToast = toast.loading('Loading...');
     try {
         const loginResponse = await LoginUser({ form: data });
-        // console.log('Logged in successfully:', loginResponse);
+        console.log('Logged in successfully:', loginResponse);
         toast.dismiss(LoadingToast);
         router.push('/');
-    } catch (error: any) {
+    } catch (error) {
         toast.dismiss(LoadingToast);
         if (error.message.includes('Invalid email or password')) {
             toast.error('Invalid email or password');
@@ -78,7 +78,7 @@ export default function Login() {
             disabled={loading}
             className='w-full'
           >
-            {loading ? 'Loading...' : 'Register'}
+            {loading ? 'Loading...' : 'Login'}
           </Button>
         </form>
       </div>
