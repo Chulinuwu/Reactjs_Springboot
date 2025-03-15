@@ -10,9 +10,10 @@ import { config } from '@/app/config';
 
 interface NavbarProps {
     balance: number;
+    isAdmin: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ balance }) => {
+export const Navbar: React.FC<NavbarProps> = ({ balance, isAdmin }) => {
     const router = useRouter();
 
   async function onLogout() {
@@ -47,10 +48,12 @@ export const Navbar: React.FC<NavbarProps> = ({ balance }) => {
         {/* Login button and Balance */}
         <div className='flex items-center gap-6'>
             <>
-              <div className='flex items-center space-x-2'>
-                <span className='hidden sm:inline text-sm'>Balance:</span>
-                <div className='flex h-auto w-auto rounded text-white font-semibold bg-green-500 p-2'>${balance}</div>
-              </div>
+                {!isAdmin && (
+                    <div className='flex items-center space-x-2'>
+                        <span className='hidden sm:inline text-sm'>Balance:</span>
+                        <div className='flex h-auto w-auto rounded text-white font-semibold bg-green-500 p-2'>${balance}</div>
+                    </div>
+                )}
               <button
                 type='button'
                 onClick={onLogout}

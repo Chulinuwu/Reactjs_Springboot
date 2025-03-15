@@ -29,6 +29,7 @@ export default function ProductManagement() {
   const [user, setUser] = useState<User | null>(null);
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -50,13 +51,13 @@ export default function ProductManagement() {
     category: "",
   })
 
-  const isAdmin = false // TODO: Check if user is admin
 
   const fetchUser = async () => {
     try {
       const userData = await getMe();
       if (userData) {
         setUser(userData);
+        setIsAdmin(userData.role === "ROLE_ADMIN");
       } 
     } catch (error) {
       toast.error("Failed to fetch user data.");
@@ -151,7 +152,7 @@ export default function ProductManagement() {
 
   return (
     <div>
-      <Navbar balance={user?.balance ?? 0} />
+      <Navbar balance={user?.balance ?? 0} isAdmin={isAdmin} />
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4 pt-28 pb-10 md:px-8">
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

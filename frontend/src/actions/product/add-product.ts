@@ -1,10 +1,19 @@
 'use server'
+
 import { Product } from "@/types/product"
+import { config } from "@/app/config"
+import { cookies } from 'next/headers';
 
 export async function addProduct(product: Product): Promise<Product> {
-    const res = await fetch(`http://localhost:8080/api/products`, {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('auth-token');
+
+    const res = await fetch(`${config.baseURL}/api/products`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json', 
+        Authorization: `Bearer ${token?.value}` 
+      },
       body: JSON.stringify(product),
     })
   
